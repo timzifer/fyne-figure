@@ -109,7 +109,24 @@ type Chart struct {
 	onGesture  func(active bool)
 	wheelTimer *time.Timer
 
+	// onFrame is handed to every target the chart draws into. See OnFrame.
+	onFrame func(fynefigure.Frame)
+
 	renderr error
+}
+
+// OnFrame registers a callback told what every frame of this chart cost,
+// including the calls that painted nothing. See [fynefigure.Target.OnFrame]
+// for what it may do: it runs with the surface held and must only record.
+//
+// It survives the chart being closed and shown again, which makes a new target.
+func (c *Chart) OnFrame(fn func(fynefigure.Frame)) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+	c.onFrame = fn
+	if c.target != nil {
+		c.target.OnFrame(fn)
+	}
 }
 
 // A chart is a widget and nothing else. The pointer interfaces are its
@@ -337,6 +354,7 @@ func (c *Chart) ensureTarget() {
 	}
 	c.target = fynefigure.New()
 	c.target.OnGeometry(c.painterGeometry)
+	c.target.OnFrame(c.onFrame)
 }
 
 // painterGeometry is called from Fyne's painter when it is about to draw the
