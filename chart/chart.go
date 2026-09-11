@@ -10,6 +10,7 @@ import (
 	"github.com/timzifer/figure"
 	"github.com/timzifer/figure/data"
 	"github.com/timzifer/figure/scale"
+	figuretheme "github.com/timzifer/figure/theme"
 	fynefigure "github.com/timzifer/fyne_figure"
 	"github.com/timzifer/fyne_figure/internal/look"
 )
@@ -131,6 +132,12 @@ type Chart struct {
 	// change that touched neither is not a rebuild.
 	themed look.State
 
+	// authored is the theme the plot came with, read before the chart first
+	// restyles it. Fyne's colours are laid over this rather than replacing it
+	// — see [look.State.Over] — and it has to be read once, up front, because
+	// every restyle after the first writes the plot's theme.
+	authored figuretheme.Theme
+
 	// hooked records that the plot carries this chart's event handlers. They
 	// belong to the plot rather than to the chart, so they outlive a chart
 	// rebuilt for a new typeface and must not be added twice.
@@ -151,7 +158,7 @@ var _ fyne.Widget = (*Chart)(nil)
 // Nothing is rasterized until the widget is laid out, so a chart built and
 // never shown has taken no memory beyond the plot itself.
 func New(p *figure.Plot, opts ...Option) *Chart {
-	c := &Chart{plot: p, cfg: defaults(), dpr: 1}
+	c := &Chart{plot: p, cfg: defaults(), dpr: 1, authored: p.Theme()}
 	for _, o := range opts {
 		o(&c.cfg)
 	}
