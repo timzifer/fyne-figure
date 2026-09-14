@@ -305,7 +305,7 @@ func (t *tooltip) render(content TooltipContent, dpr float64) error {
 		descent = max32(descent, mt.Descent)
 	}
 	if width <= 0 || ascent+descent <= 0 {
-		return errors.New("fyne-figure/chart: the tooltip's text measured as nothing")
+		return errors.New("fynefigure/chart: the tooltip's text measured as nothing")
 	}
 
 	spacing := st.LineSpacing
@@ -357,7 +357,7 @@ func (t *tooltip) render(content TooltipContent, dpr float64) error {
 
 	img := t.draw.Image()
 	if img == nil {
-		return errors.New("fyne-figure/chart: the tooltip drew no pixels")
+		return errors.New("fynefigure/chart: the tooltip drew no pixels")
 	}
 	// A copy, because the surface's buffer belongs to the surface: the next
 	// tooltip opens it again, and Fyne's painter may still be reading this

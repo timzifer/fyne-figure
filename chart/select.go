@@ -7,7 +7,7 @@ import (
 	"github.com/timzifer/figure/interact"
 	"github.com/timzifer/figure/ir"
 
-	fynefigure "github.com/timzifer/fyne-figure"
+	"github.com/timzifer/fynefigure"
 )
 
 // A selection is the rows a reader picked. figure holds none — it says what the

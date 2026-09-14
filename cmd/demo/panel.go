@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/timzifer/fyne-figure/gpu"
+	"github.com/timzifer/fynefigure/gpu"
 )
 
 // benchFrames is how many frames a benchmark draws: enough for a p95 to mean

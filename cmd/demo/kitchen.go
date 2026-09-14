@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"github.com/timzifer/fyne-figure/gpu"
+	"github.com/timzifer/fynefigure/gpu"
 )
 
 const hint = "Hover the chart to read it. Drag to pan, turn the wheel to zoom, double click to go back."

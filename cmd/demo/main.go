@@ -53,7 +53,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"github.com/timzifer/fyne-figure/gpu"
+	"github.com/timzifer/fynefigure/gpu"
 )
 
 func main() {

@@ -1,16 +1,16 @@
 // The demo is a module of its own so that it can import the GPU tier.
 //
-// fyne-figure/gpu is nested in fyne-figure and so excluded from its module
+// fynefigure/gpu is nested in fynefigure and so excluded from its module
 // graph — deliberately, so that a chart widget does not cost a consumer wgpu,
 // naga and a foreign-function layer nobody asked for. That leaves no way for a
-// package inside fyne-figure to import it: a require in the parent would put
+// package inside fynefigure to import it: a require in the parent would put
 // the GPU stack back in every consumer's graph, which is the arrangement the
 // nesting exists to prevent.
 //
 // A third module resolves it. Nothing imports the demo, so the replace
 // directives below cost no one anything, and the widget and the tier stay as
 // separate as they were.
-module github.com/timzifer/fyne-figure/cmd/demo
+module github.com/timzifer/fynefigure/cmd/demo
 
 go 1.25.0
 
@@ -18,8 +18,8 @@ require (
 	fyne.io/fyne/v2 v2.7.3
 	github.com/timzifer/figure v0.10.0
 	github.com/timzifer/figure/backend/gg v0.9.0
-	github.com/timzifer/fyne-figure v0.0.0
-	github.com/timzifer/fyne-figure/gpu v0.0.0
+	github.com/timzifer/fynefigure v0.0.0
+	github.com/timzifer/fynefigure/gpu v0.0.0
 )
 
 require (
@@ -64,8 +64,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/timzifer/fyne-figure => ../..
+replace github.com/timzifer/fynefigure => ../..
 
-replace github.com/timzifer/fyne-figure/gpu => ../../gpu
+replace github.com/timzifer/fynefigure/gpu => ../../gpu
 
 replace github.com/gogpu/gg => github.com/timzifer/gg v0.52.6-figure.5

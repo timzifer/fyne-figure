@@ -1,11 +1,11 @@
-﻿package main
+package main
 
 import (
 	"slices"
 	"sync"
 	"time"
 
-	fynefigure "github.com/timzifer/fyne-figure"
+	"github.com/timzifer/fynefigure"
 )
 
 // recorder keeps what the chart on stage has cost, for the side panel.

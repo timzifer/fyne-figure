@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"fmt"
@@ -18,10 +18,10 @@ import (
 	"github.com/timzifer/figure/palette"
 	"github.com/timzifer/figure/scale"
 	"github.com/timzifer/figure/three"
-	fynefigure "github.com/timzifer/fyne-figure"
-	"github.com/timzifer/fyne-figure/chart"
-	"github.com/timzifer/fyne-figure/cmd/demo/plots"
-	"github.com/timzifer/fyne-figure/orbit"
+	"github.com/timzifer/fynefigure"
+	"github.com/timzifer/fynefigure/chart"
+	"github.com/timzifer/fynefigure/cmd/demo/plots"
+	"github.com/timzifer/fynefigure/orbit"
 )
 
 // groupInteraction is the tree's last group: what the widgets add to figure

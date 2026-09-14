@@ -6,9 +6,9 @@ Three modules, one repository.
 
 | Path | Module | Depends on |
 |---|---|---|
-| `.` | `github.com/timzifer/fyne-figure` | Fyne, figure, figure's raster backend |
-| `gpu` | `github.com/timzifer/fyne-figure/gpu` | the above plus figure's GPU tier, and through it wgpu |
-| `cmd/demo` | `github.com/timzifer/fyne-figure/cmd/demo` | both of the above |
+| `.` | `github.com/timzifer/fynefigure` | Fyne, figure, figure's raster backend |
+| `gpu` | `github.com/timzifer/fynefigure/gpu` | the above plus figure's GPU tier, and through it wgpu |
+| `cmd/demo` | `github.com/timzifer/fynefigure/cmd/demo` | both of the above |
 
 The split is not cosmetic. A nested module is excluded from its parent's module
 graph, so importing the widget cannot pull a GPU stack into a build that never

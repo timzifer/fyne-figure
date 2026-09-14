@@ -193,7 +193,7 @@ func Follow(x, y bool) Option {
 // It is off by default because it is visible: a chart being dragged is soft
 // until it is let go, and that is a trade a reader should be offered rather
 // than given. Reach for it when a chart is large, or the data heavy, or the
-// machine slow — and note that the GPU tier in fyne-figure/gpu makes the same
+// machine slow — and note that the GPU tier in fynefigure/gpu makes the same
 // frame cost 5 ms without softening anything, so try that first.
 //
 // Values outside (0, 1] mean the same as 1. A chart nobody is touching is

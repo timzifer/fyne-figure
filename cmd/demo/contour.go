@@ -13,9 +13,9 @@ import (
 	"github.com/timzifer/figure/scale"
 	"github.com/timzifer/figure/stat"
 	"github.com/timzifer/figure/three"
-	fynefigure "github.com/timzifer/fyne-figure"
-	"github.com/timzifer/fyne-figure/chart"
-	"github.com/timzifer/fyne-figure/orbit"
+	"github.com/timzifer/fynefigure"
+	"github.com/timzifer/fynefigure/chart"
+	"github.com/timzifer/fynefigure/orbit"
 )
 
 // The field's range, chosen once and used by everything that colours it or
