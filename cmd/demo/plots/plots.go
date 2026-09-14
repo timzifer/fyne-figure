@@ -60,6 +60,17 @@ func All() []Entry {
 	return out
 }
 
+// Newest lists entry ids, most recently added first. The demo's tree opens on
+// the head of it, so a chart type figure has just grown is the first thing on
+// screen: add an id at the front when you add an entry for one.
+func Newest() []string {
+	return []string{
+		"nichols", "nichols-peak", "smith-vswr",
+		"contour", "contour-heatmap", "contour-floor",
+		"surface", "cascade", "bar3", "line3",
+	}
+}
+
 // flat makes a builder for a flat chart: a fresh responsive plot at its design
 // size, with a theme and a title, configured by build.
 func flat(title string, w, h int, th theme.Theme, build func(*figure.Plot), opts ...figure.Option) func() *figure.Plot {

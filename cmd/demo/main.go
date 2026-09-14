@@ -57,7 +57,7 @@ import (
 )
 
 func main() {
-	first := flag.String("plot", "signal", "id of the chart to show first (see -list)")
+	first := flag.String("plot", "", "id of the chart to show first (see -list); the newest when empty")
 	cpu := flag.Bool("cpu", false, "start on the CPU rasterizer rather than the GPU tier")
 	list := flag.Bool("list", false, "list the charts and exit")
 	flag.Parse()

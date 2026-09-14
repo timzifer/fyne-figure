@@ -105,3 +105,21 @@ func TestBuildersAreFresh(t *testing.T) {
 		}
 	}
 }
+
+// Every id Newest names is an entry, once.
+func TestNewestNamesEntries(t *testing.T) {
+	ids := map[string]bool{}
+	for _, e := range All() {
+		ids[e.ID] = true
+	}
+	seen := map[string]bool{}
+	for _, id := range Newest() {
+		if !ids[id] {
+			t.Errorf("%q: in Newest but not in All", id)
+		}
+		if seen[id] {
+			t.Errorf("%q: in Newest twice", id)
+		}
+		seen[id] = true
+	}
+}

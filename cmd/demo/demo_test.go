@@ -121,3 +121,31 @@ func TestSwitchingAwayStopsAnimation(t *testing.T) {
 		}
 	}
 }
+
+// The tree starts closed but for New, which lists the newest charts and
+// selects them under its own nodes; a chart that is not new opens its group.
+func TestTheTreeOpensOnNew(t *testing.T) {
+	k := open(t)
+	for _, g := range k.cat.children[""] {
+		if open := k.tree.IsBranchOpen(g); open != (g == newNode) {
+			t.Errorf("%s: open = %v", g, open)
+		}
+	}
+	fresh := k.cat.children[newNode]
+	if len(fresh) == 0 || len(fresh) > newest {
+		t.Fatalf("New holds %d charts, want 1..%d", len(fresh), newest)
+	}
+
+	k.open("")
+	if k.node != fresh[0] {
+		t.Errorf("open(\"\") selected %q, want %q", k.node, fresh[0])
+	}
+	if k.cur == nil || newPrefix+k.cur.id != fresh[0] {
+		t.Errorf("open(\"\") put %v on stage", k.cur)
+	}
+
+	k.open("signal")
+	if k.node != "signal" || !k.tree.IsBranchOpen(groupPrefix+k.cur.group) {
+		t.Errorf("open(signal): node %q, group open %v", k.node, k.tree.IsBranchOpen(groupPrefix+k.cur.group))
+	}
+}

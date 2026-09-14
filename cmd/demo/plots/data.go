@@ -3,6 +3,8 @@ package plots
 import (
 	"fmt"
 	"math"
+	"math/cmplx"
+	"sync"
 	"time"
 
 	"github.com/timzifer/figure"
@@ -486,6 +488,68 @@ func imagParts(vs []complex128) []float64 {
 	}
 	return out
 }
+
+// --- nichols ------------------------------------------------------------------
+
+// openLoop is the plant the Nichols charts draw: an integrator and two lags.
+func openLoop(w, k float64) complex128 {
+	s := complex(0, w)
+	return complex(k, 0) / (s * (1 + s/2) * (1 + s/10))
+}
+
+func loopOmega(t float64) float64 { return math.Pow(10, -1+4*t) }
+
+// loopSweep is the open loop over four decades as phase in degrees and gain in
+// dB, the phase unwrapped so the response does not leap across −180°.
+func loopSweep(k float64) (phase, gain []float64) {
+	const n = 400
+	phase, gain = make([]float64, n), make([]float64, n)
+	for i := range n {
+		l := openLoop(loopOmega(float64(i)/float64(n-1)), k)
+		phase[i] = cmplx.Phase(l) * 180 / math.Pi
+		if i > 0 {
+			phase[i] -= 360 * math.Round((phase[i]-phase[i-1])/360)
+		}
+		gain[i] = 20 * math.Log10(cmplx.Abs(l))
+	}
+	return phase, gain
+}
+
+type loopReading struct{ phase, gain, peak, w float64 }
+
+// loopPeak is where the closed loop resonates, and what the open loop was
+// doing there.
+func loopPeak(k float64) loopReading {
+	best := loopReading{peak: math.Inf(-1)}
+	for i := range 4001 {
+		w := loopOmega(float64(i) / 4000)
+		l := openLoop(w, k)
+		if db := 20 * math.Log10(cmplx.Abs(l/(1+l))); db > best.peak {
+			phase := cmplx.Phase(l) * 180 / math.Pi
+			if phase > 0 {
+				phase -= 360
+			}
+			best = loopReading{phase: phase, gain: 20 * math.Log10(cmplx.Abs(l)), peak: db, w: w}
+		}
+	}
+	return best
+}
+
+// nicholsTangent is the loop gain whose closed loop peaks at exactly 3 dB, by
+// bisection, so the chart cannot drift from its note. It is solved once: the
+// plots are built fresh on every call, the number they share is not.
+var nicholsTangent = sync.OnceValue(func() float64 {
+	lo, hi := 0.01, 100.0
+	for range 64 {
+		k := (lo + hi) / 2
+		if loopPeak(k).peak < 3 {
+			lo = k
+		} else {
+			hi = k
+		}
+	}
+	return (lo + hi) / 2
+})
 
 // --- relational ---------------------------------------------------------------
 

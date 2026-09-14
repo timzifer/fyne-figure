@@ -26,6 +26,7 @@ type kitchen struct {
 	interactive, detail bool
 
 	cur      *entry
+	node     widget.TreeNodeID // the tree node cur was selected by
 	v        *view
 	stop     func()
 	buildErr error
@@ -74,7 +75,8 @@ func (k *kitchen) newTree() *widget.Tree {
 		func(id widget.TreeNodeID, _ bool, o fyne.CanvasObject) { o.(*widget.Label).SetText(k.cat.label(id)) },
 	)
 	t.OnSelected = func(id widget.TreeNodeID) {
-		if e, ok := k.cat.byID[id]; ok {
+		if e, ok := k.cat.entry(id); ok {
+			k.node = id
 			if e != k.cur {
 				k.show(e)
 			}
@@ -83,21 +85,28 @@ func (k *kitchen) newTree() *widget.Tree {
 		// A group is not a chart: open or close it, and keep the chart that is
 		// on stage selected.
 		t.ToggleBranch(id)
-		if k.cur != nil {
-			t.Select(k.cur.id)
+		if k.node != "" {
+			t.Select(k.node)
 		} else {
 			t.Unselect(id)
 		}
 	}
-	t.OpenAllBranches()
+	// Closed but for New: the tree starts as a short list of what changed,
+	// and every group is a click away.
+	t.OpenBranch(newNode)
 	return t
 }
 
-// open selects an entry by id, which puts it on stage.
+// open selects an entry by id, which puts it on stage. A chart that is not
+// new opens its group, since a closed branch hides the selection.
 func (k *kitchen) open(id string) {
 	e := k.cat.find(id)
-	k.tree.Select(e.id)
-	k.tree.ScrollTo(e.id)
+	node := k.cat.node(e)
+	if node == e.id {
+		k.tree.OpenBranch(groupPrefix + e.group)
+	}
+	k.tree.Select(node)
+	k.tree.ScrollTo(node)
 }
 
 // env is what the next chart is built with.

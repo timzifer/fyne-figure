@@ -27,6 +27,17 @@ type catalogue struct {
 // two can never be confused whatever an entry is called.
 const groupPrefix = "group:"
 
+// newNode is the tree's first group: the charts added last, which is the only
+// group open when the demo starts. Its children repeat entries listed under
+// their own group, and a tree node has one parent, so they are prefixed.
+const (
+	newNode   = groupPrefix + "New"
+	newPrefix = "new:"
+)
+
+// newest is how many of plots.Newest the New group shows.
+const newest = 8
+
 // catalog is every chart figure draws — package plots — and the ones that
 // need more than one widget or a clock — showcase.go — in the tree's order.
 func catalog() *catalogue {
@@ -60,6 +71,22 @@ func catalog() *catalogue {
 			c.children[""] = append(c.children[""], node)
 		}
 	}
+	var fresh []string
+	for _, id := range plots.Newest() {
+		if len(fresh) == newest {
+			break
+		}
+		if c.byID[id] == nil {
+			log.Printf("catalogue: %q is listed as new but is not in the tree", id)
+			continue
+		}
+		fresh = append(fresh, newPrefix+id)
+	}
+	if len(fresh) > 0 {
+		c.groups[newNode] = "New"
+		c.children[newNode] = fresh
+		c.children[""] = append([]string{newNode}, c.children[""]...)
+	}
 	for _, e := range all {
 		if c.byID[e.id] == nil {
 			log.Printf("catalogue: %q is in group %q, which is not in the tree", e.id, e.group)
@@ -85,12 +112,33 @@ func fromPlots(pe plots.Entry) *entry {
 	return e
 }
 
-// find is the entry with the given id, or the first one.
+// find is the entry with the given id, or the newest one.
 func (c *catalogue) find(id string) *entry {
-	if e, ok := c.byID[id]; ok {
+	if e, ok := c.entry(id); ok {
 		return e
 	}
+	if fresh := c.children[newNode]; len(fresh) > 0 {
+		return c.byID[strings.TrimPrefix(fresh[0], newPrefix)]
+	}
 	return c.entries[0]
+}
+
+// entry is the entry a tree node shows, whether it is listed under its own
+// group or under New.
+func (c *catalogue) entry(node string) (*entry, bool) {
+	e, ok := c.byID[strings.TrimPrefix(node, newPrefix)]
+	return e, ok
+}
+
+// node is where the tree shows an entry: under New when it is new, since that
+// group is open, and under its own group otherwise.
+func (c *catalogue) node(e *entry) string {
+	for _, n := range c.children[newNode] {
+		if n == newPrefix+e.id {
+			return n
+		}
+	}
+	return e.id
 }
 
 func (c *catalogue) isBranch(id string) bool {
@@ -101,7 +149,7 @@ func (c *catalogue) label(id string) string {
 	if g, ok := c.groups[id]; ok {
 		return fmt.Sprintf("%s  (%d)", g, len(c.children[id]))
 	}
-	if e, ok := c.byID[id]; ok {
+	if e, ok := c.entry(id); ok {
 		return e.title
 	}
 	return id

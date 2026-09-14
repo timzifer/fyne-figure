@@ -670,6 +670,21 @@ func smith() []Entry {
 				smithAxes(p)
 				p.Add(geom.Line(src, geom.X("g"), geom.Y("b"), geom.Color(palette.OkabeIto[2])))
 			}, figure.Coord(coord.Smith(coord.SmithAdmittance(true))), figure.Legend(false))},
+		{ID: "smith-vswr", Group: g, Title: "VSWR circles and Q arcs",
+			Note: "The antenna sweep read against 1.5, 2 and 3:1 VSWR circles and constant-Q arcs — two loci the coord bends into shape.",
+			Plot: flat("The same antenna, read against 2:1", 620, 560, theme.Light, func(p *figure.Plot) {
+				re, im := s11Sweep(121)
+				r, x := make([]float64, len(re)), make([]float64, len(re))
+				for i := range re {
+					r[i], x[i] = coord.SmithZ(re[i], im[i])
+				}
+				smithAxes(p)
+				p.Add(geom.Locus(stat.SmithVSWR, []float64{1.5, 2, 3}, geom.Dash(), geom.Label("VSWR")))
+				p.Add(geom.Locus(stat.SmithQ, []float64{1, 2, 5}, geom.Dash(2, 3), geom.Label("Q")))
+				p.Add(geom.Line(figure.NewTable().Float64("r", r).Float64("x", x),
+					geom.X("r"), geom.Y("x"),
+					geom.Color(palette.OkabeIto[1]), geom.Width(2), geom.Label("S₁₁")))
+			}, figure.Coord(coord.Smith()))},
 	}
 }
 
@@ -763,7 +778,51 @@ func annotations() []Entry {
 					geom.Note(1, 246, "budget", geom.FontSize(11), geom.Align(ir.AlignStart, ir.AlignTop)),
 				)
 			})},
+		{ID: "nichols", Group: GroupAnnotations, Title: "Nichols diagram",
+			Note: "One loop at two gains over the closed-loop M and N contours; the lower gain is tangent to 3 dB. Zoom in and the contours are recomputed, not magnified.",
+			Plot: flat("An open loop, and what it does to the closed one", 640, 560, theme.Light, func(p *figure.Plot) {
+				p.X(scale.Linear(scale.Domain(-270, -90),
+					scale.TickValues(-270, -240, -210, -180, -150, -120, -90)))
+				p.Y(scale.Linear(scale.Domain(-24, 36)))
+				nicholsGrid(p)
+				for i, k := range []float64{nicholsTangent(), 6} {
+					phase, gain := loopSweep(k)
+					p.Add(geom.Line(
+						figure.NewTable().Float64("phase", phase).Float64("gain", gain),
+						geom.X("phase"), geom.Y("gain"),
+						geom.Color(palette.OkabeIto[1+i]), geom.Width(2),
+						geom.Label(fmt.Sprintf("K = %.2f", k))))
+				}
+			}, figure.XTitle("open-loop phase (degrees)"), figure.YTitle("open-loop gain (dB)"))},
+		{ID: "nichols-peak", Group: GroupAnnotations, Title: "Nichols resonance detail",
+			Note: "A tenth of the Nichols plane around where the loop touches the 3 dB contour, with the peak computed from the loop.",
+			Plot: flat("Where the loop touches 3 dB", 520, 460, theme.Light, func(p *figure.Plot) {
+				k := nicholsTangent()
+				phase, gain := loopSweep(k)
+				at := loopPeak(k)
+				p.X(scale.Linear(scale.Domain(-190, -110), scale.TickValues(-180, -160, -140, -120)))
+				p.Y(scale.Linear(scale.Domain(-8, 10)))
+				nicholsGrid(p)
+				p.Add(geom.Line(
+					figure.NewTable().Float64("phase", phase).Float64("gain", gain),
+					geom.X("phase"), geom.Y("gain"), geom.Color(palette.OkabeIto[1]), geom.Width(2)))
+				p.Add(geom.Scatter(
+					figure.NewTable().Float64("phase", []float64{at.phase}).Float64("gain", []float64{at.gain}),
+					geom.X("phase"), geom.Y("gain"), geom.Color(palette.OkabeIto[0]), geom.Size(9)))
+				p.Add(geom.Note(at.phase-2.5, at.gain+1.5,
+					fmt.Sprintf("peak %.1f dB at ω = %.2f rad/s", at.peak, at.w),
+					geom.Align(ir.AlignEnd, ir.AlignBaseline)))
+			}, figure.XTitle("open-loop phase (degrees)"), figure.YTitle("open-loop gain (dB)"), figure.Legend(false))},
 	}
+}
+
+// nicholsGrid adds the closed-loop magnitude (solid) and phase (dashed)
+// contours under whatever the panel holds, at the levels a chart is printed at.
+func nicholsGrid(p *figure.Plot) {
+	p.Add(geom.Locus(stat.NicholsM, []float64{-12, -6, -3, -1, 0, 1, 3, 6, 12},
+		geom.Dash(), geom.Label("closed-loop gain")))
+	p.Add(geom.Locus(stat.NicholsN, []float64{-1, -5, -10, -20, -45, -90, -150, -210, -270},
+		geom.Dash(2, 3), geom.Label("closed-loop phase")))
 }
 
 // --- Layout -------------------------------------------------------------------
