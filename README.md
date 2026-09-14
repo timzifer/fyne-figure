@@ -1,6 +1,6 @@
-# fyne-figure
+# fynefigure
 
-[![CI](https://github.com/timzifer/fyne-figure/actions/workflows/ci.yml/badge.svg)](https://github.com/timzifer/fyne-figure/actions/workflows/ci.yml)
+[![CI](https://github.com/timzifer/fynefigure/actions/workflows/ci.yml/badge.svg)](https://github.com/timzifer/fynefigure/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/timzifer/fynefigure.svg)](https://pkg.go.dev/github.com/timzifer/fynefigure)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -24,8 +24,8 @@ it later, and `false` takes the pointer back.
 
 ```sh
 go get github.com/timzifer/fynefigure
-git clone https://github.com/timzifer/fyne-figure
-cd fyne-figure/cmd/demo && go run .
+git clone https://github.com/timzifer/fynefigure
+cd fynefigure/cmd/demo && go run .
 ```
 
 The demo is a module of its own — it opts into the GPU tier, which is nested
