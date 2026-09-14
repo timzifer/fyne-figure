@@ -1,4 +1,4 @@
-package main
+﻿package main
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/timzifer/fyne_figure/cmd/demo/plots"
+	"github.com/timzifer/fyne-figure/cmd/demo/plots"
 )
 
 // entry is one leaf of the tree: a chart, and how to build it on stage.

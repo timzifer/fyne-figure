@@ -1,4 +1,4 @@
-package main
+﻿package main
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/test"
-	"github.com/timzifer/fyne_figure/gpu"
+	"github.com/timzifer/fyne-figure/gpu"
 )
 
 // open puts the kitchen in a test window at the size the demo opens at.

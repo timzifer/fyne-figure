@@ -11,8 +11,8 @@ import (
 	"github.com/timzifer/figure/data"
 	"github.com/timzifer/figure/scale"
 	figuretheme "github.com/timzifer/figure/theme"
-	fynefigure "github.com/timzifer/fyne_figure"
-	"github.com/timzifer/fyne_figure/internal/look"
+	fynefigure "github.com/timzifer/fyne-figure"
+	"github.com/timzifer/fyne-figure/internal/look"
 )
 
 // Chart is a figure plot as a Fyne widget.

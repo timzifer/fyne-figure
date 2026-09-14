@@ -1,4 +1,4 @@
-package main
+﻿package main
 
 import (
 	"bytes"
@@ -15,9 +15,9 @@ import (
 	ggbackend "github.com/timzifer/figure/backend/gg"
 	"github.com/timzifer/figure/interact"
 	"github.com/timzifer/figure/three"
-	fynefigure "github.com/timzifer/fyne_figure"
-	"github.com/timzifer/fyne_figure/chart"
-	"github.com/timzifer/fyne_figure/orbit"
+	fynefigure "github.com/timzifer/fyne-figure"
+	"github.com/timzifer/fyne-figure/chart"
+	"github.com/timzifer/fyne-figure/orbit"
 )
 
 // env is what a chart is built with: the panel's switches as they stand, and

@@ -1,9 +1,15 @@
 // Command demo is figure's kitchensink: every chart figure draws, in a Fyne
 // window, with what each one costs beside it.
 //
-//	go run ./cmd/demo
-//	go run ./cmd/demo -plot surface -cpu
-//	go run ./cmd/demo -list
+//	cd cmd/demo
+//	go run .
+//	go run . -plot surface -cpu
+//	go run . -list
+//
+// It is a module of its own so that it can import the GPU tier, which is
+// nested inside the widget's module and so outside its graph. See go.mod
+// beside this file, and gpu.go for the tier itself, which is not every
+// platform's to have.
 //
 // The tree on the left is the catalogue: every mark, coordinate system and
 // layout figure has, grouped the way docs/chart-types.md groups them, and the
@@ -47,7 +53,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"github.com/timzifer/fyne_figure/gpu"
+	"github.com/timzifer/fyne-figure/gpu"
 )
 
 func main() {
