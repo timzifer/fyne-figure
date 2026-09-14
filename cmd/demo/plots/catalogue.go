@@ -355,6 +355,21 @@ func stacking() []Entry {
 						geom.Y("lo"), geom.Y2("hi"), geom.X("lane"),
 						geom.ColorBy("range", scale.Qualitative(palette.Default))))
 			}, figure.YTitle("m/min"))},
+		{ID: "horizon", Group: g, Title: "Horizon",
+			Note: "A series folded into bands of equal height, each drawn at the panel's full height and told apart by colour: the strip stays readable at a height where a line chart stops being one.",
+			Plot: flat("Feeder load — six hours", 820, 220, theme.Light, func(p *figure.Plot) {
+				p.X(scale.Time())
+				p.Y(scale.Linear())
+				// The fold gives the vertical ladder up, so the colourbar is
+				// what names the bands — in kilowatts, about the idle draw the
+				// fold is measured from.
+				p.Add(geom.Horizon(meterLoad(),
+					geom.X("t"), geom.Y("kw"),
+					geom.BandHeight(meterBand),
+					geom.Baseline(meterBase),
+					geom.Label("load"),
+				))
+			}, figure.YTitle("kW from idle"))},
 	}
 }
 

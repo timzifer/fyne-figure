@@ -224,6 +224,41 @@ func speedRanges() *data.Table {
 		String("range", []string{"below target", "at target"})
 }
 
+// meterBase is a feeder's idle draw in kilowatts, which is the origin the
+// horizon chart's fold is measured from, and meterBand is one band of it.
+//
+// The band is pinned rather than cut from the data: 30 kW means 30 kW in this
+// chart and in the next one drawn this way, where a band taken as a share of
+// each day's own maximum would make two days incomparable — which is the one
+// thing the form exists to prevent.
+const (
+	meterBase = 120.0
+	meterBand = 30.0
+)
+
+// meterLoad is six hours of metered load for one feeder, about meterBase.
+//
+// It is the series a horizon chart is for: a slow shift swell, a faster machine
+// cycle on top of it, and one short overload that a trace this height would
+// flatten into the rest of the line.
+func meterLoad() *data.Table {
+	const n = 360
+	start := time.Date(2026, time.September, 14, 6, 0, 0, 0, time.UTC)
+	times := make([]time.Time, n)
+	kw := make([]float64, n)
+	for i := range n {
+		x := float64(i) / float64(n-1)
+		v := meterBase + 52*math.Sin(2*math.Pi*x) + 16*math.Sin(23*math.Pi*x)
+		// The overload: a couple of bands deep and a few minutes wide.
+		if d := float64(i) - 0.62*n; math.Abs(d) < 9 {
+			v += 95 * (1 - math.Abs(d)/9)
+		}
+		times[i] = start.Add(time.Duration(i) * time.Minute)
+		kw[i] = v
+	}
+	return figure.NewTable().Time("t", times).Float64("kw", kw)
+}
+
 // --- distributions ------------------------------------------------------------
 
 func cohorts() ([]string, []float64) {
