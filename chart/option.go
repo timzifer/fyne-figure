@@ -47,7 +47,6 @@ func defaults() config {
 		detail:  1,
 		followX: true,
 		min:     fyne.NewSize(240, 160),
-		tooltip: true,
 		format:  DefaultTooltip,
 		theme:   true,
 		wheel:   DefaultWheelScale,
@@ -61,8 +60,9 @@ func defaults() config {
 // that zoomed by the raw number would barely move.
 const DefaultWheelScale = 4
 
-// Interactive lets a reader at the chart: hover and its tooltip, a drag, the
-// wheel, a click on a legend row, a double click. It is off by default.
+// Interactive lets a reader at the chart: hover, a drag, the wheel, a click on
+// a legend row, a double click. It is off by default. A tooltip is a second
+// opt-in on top of it: see [Tooltip].
 //
 // Off, the chart is a picture. It takes no pointer events at all, so it scrolls
 // with a scroll container around it and leaves every gesture to whatever is
@@ -82,7 +82,15 @@ func MinSize(w, h float32) Option {
 	return func(c *config) { c.min = fyne.NewSize(w, h) }
 }
 
-// Tooltip turns the hover tooltip on or off. It is on by default.
+// Tooltip turns the hover tooltip on or off. It is off by default.
+//
+// It is a second opt-in, not a part of [Interactive]: a chart shows a tooltip
+// only when it is both interactive and asked for one. A chart that hands its
+// hover to the application — a readout under the stage, a crosshair, a linked
+// table — wants the pointer without a box floating over the marks, and a
+// tooltip turned on for a chart that is not interactive waits until it is.
+//
+// [Chart.SetTooltip] changes it on a chart already on screen.
 func Tooltip(on bool) Option { return func(c *config) { c.tooltip = on } }
 
 // TooltipFormat replaces what the tooltip says. It is called for the mark

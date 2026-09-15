@@ -54,8 +54,8 @@ var rowNames = [...]string{
 type panel struct {
 	k *kitchen
 
-	gpuCheck, pointer, coarse *widget.Check
-	backend                   *widget.Label
+	gpuCheck, pointer, tips, coarse *widget.Check
+	backend                         *widget.Label
 
 	values   []*widget.Label
 	errLabel *widget.Label
@@ -94,6 +94,12 @@ func newPanel(k *kitchen) *panel {
 		}
 	})
 	p.set(p.pointer, k.interactive)
+	p.tips = widget.NewCheck("Tooltips", func(on bool) {
+		if !p.quiet {
+			k.setTooltip(on)
+		}
+	})
+	p.set(p.tips, k.tooltip)
 	p.coarse = widget.NewCheck("Half resolution while dragging", func(on bool) {
 		if !p.quiet {
 			k.setDetail(on)
@@ -133,7 +139,7 @@ func newPanel(k *kitchen) *panel {
 	})
 
 	p.obj = container.NewVBox(
-		widget.NewCard("Rendering", "", container.NewVBox(p.gpuCheck, p.pointer, p.coarse, p.backend)),
+		widget.NewCard("Rendering", "", container.NewVBox(p.gpuCheck, p.pointer, p.tips, p.coarse, p.backend)),
 		widget.NewCard("Timings", "", container.NewVBox(form, p.errLabel)),
 		widget.NewCard("Benchmark", "", container.NewVBox(p.bench, p.benchOut)),
 		widget.NewCard("Chart", "", container.NewVBox(p.fit, p.export, p.reset)),
