@@ -65,6 +65,7 @@ func All() []Entry {
 // screen: add an id at the front when you add an entry for one.
 func Newest() []string {
 	return []string{
+		"smith-sphere", "scatter3", "antenna-pattern", "bloch",
 		"spectrogram", "survival", "weibull", "dendrogram-heatmap", "spc",
 		"bars-extruded", "radial-tree", "roc", "correlogram",
 		"horizon",
