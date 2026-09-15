@@ -74,8 +74,8 @@ github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef h1:Ch6Q+AZUxDBCVqd
 github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef/go.mod h1:nXTWP6+gD5+LUJ8krVhhoeHjvHTutPxMYl5SvkcnJNE=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/timzifer/figure v0.10.0 h1:9Dvx7zOVmucamNPp5xtm873tmZMAzCqUCc+mqdAsJnU=
-github.com/timzifer/figure v0.10.0/go.mod h1:q8KmlPjxcoOTgAe9gR4RNdTCwTb2bzA9CDlNIyzbXtE=
+github.com/timzifer/figure v0.11.0 h1:Aevmp9wsjbhuK7St1s+d9xLSkFEEtLM5Rn1jirxth+M=
+github.com/timzifer/figure v0.11.0/go.mod h1:q8KmlPjxcoOTgAe9gR4RNdTCwTb2bzA9CDlNIyzbXtE=
 github.com/timzifer/figure/backend/gg v0.9.0 h1:7b11BKwcyopjHrYdMv5gLxAFci5jrNJdrY+ouFb/FL8=
 github.com/timzifer/figure/backend/gg v0.9.0/go.mod h1:1Aepvp+gpmKwDX41JNzTAo0wbzVkNJ/SjjO/HQo/3Ns=
 github.com/timzifer/figure/backend/gg/gpu v0.3.0 h1:M0OSPhcvaG5FIszErp2uIOQmRSxiJU3eUsVuNSQsjyM=

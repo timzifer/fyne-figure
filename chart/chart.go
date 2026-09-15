@@ -628,9 +628,8 @@ func (c *Chart) hookEvents() {
 		}
 		c.clicked(ev)
 	})
-	if !c.cfg.tooltip {
-		return
-	}
+	// Registered whether or not the tooltip is on, so [Chart.SetTooltip] can
+	// turn it on later: show asks the config each time.
 	c.plot.On(figure.Hover, func(ev figure.Event) { c.tip.show(ev) })
 	c.plot.On(figure.Leave, func(figure.Event) { c.tip.hide() })
 	c.plot.On(figure.Pan, func(figure.Event) { c.tip.hide() })

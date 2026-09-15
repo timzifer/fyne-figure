@@ -87,7 +87,8 @@ c := chart.New(p,
     chart.Brush(&figure.Brush{}),         // what that rectangle looks like
     chart.LegendToggle(true),              // click a legend row to hide a series
     chart.Overlay(&figure.Crosshair{}),   // paint over the finished chart
-    chart.TooltipFormat(myFormat),         // or chart.Tooltip(false)
+    chart.Tooltip(true),                   // a second opt-in; shows only when interactive
+    chart.TooltipFormat(myFormat),         // what it says
     chart.TooltipLook(myTooltipStyle),     // colours, padding, type
     chart.ThemeFont(true),                 // the app's typeface; see below
     chart.WheelScale(4),                   // zoom per notch

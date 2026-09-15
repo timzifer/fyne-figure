@@ -23,7 +23,7 @@ type kitchen struct {
 	rec *recorder
 
 	// The panel's switches, which every chart is built with.
-	interactive, detail bool
+	interactive, tooltip, detail bool
 
 	cur      *entry
 	node     widget.TreeNodeID // the tree node cur was selected by
@@ -39,7 +39,7 @@ type kitchen struct {
 }
 
 func newKitchen(w fyne.Window, cat *catalogue) *kitchen {
-	k := &kitchen{w: w, cat: cat, rec: newRecorder(), interactive: true, done: make(chan struct{})}
+	k := &kitchen{w: w, cat: cat, rec: newRecorder(), interactive: true, tooltip: true, done: make(chan struct{})}
 	k.title = widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{Bold: true})
 	k.note = widget.NewLabel("")
 	k.note.Wrapping = fyne.TextWrapWord
@@ -111,7 +111,7 @@ func (k *kitchen) open(id string) {
 
 // env is what the next chart is built with.
 func (k *kitchen) env() env {
-	return env{interactive: k.interactive, detail: k.detail, status: k.say}
+	return env{interactive: k.interactive, tooltip: k.tooltip, detail: k.detail, status: k.say}
 }
 
 // say puts a line under the stage, or the hint when there is nothing to say.
@@ -198,6 +198,14 @@ func (k *kitchen) setInteractive(on bool) {
 	k.interactive = on
 	if k.v != nil {
 		k.v.setInteractive(on)
+	}
+}
+
+// setTooltip is the other: a tooltip is its own opt-in, on top of Interactive.
+func (k *kitchen) setTooltip(on bool) {
+	k.tooltip = on
+	if k.v != nil {
+		k.v.setTooltip(on)
 	}
 }
 
